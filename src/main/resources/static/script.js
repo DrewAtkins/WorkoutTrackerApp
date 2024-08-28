@@ -77,7 +77,6 @@ function logout() {
 
 function forgotPassword() {
     const email = document.getElementById('email').value;
-    
     if (!email) {
         alert('Please enter your email address.');
         return;

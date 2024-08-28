@@ -17,7 +17,7 @@ public class Workout {
     @Column(nullable = false)
     private LocalDateTime date;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     private String description;
 
     // Getters and setters
