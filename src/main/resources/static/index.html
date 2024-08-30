@@ -33,7 +33,11 @@
                     <h2>Log Workout</h2>
                     <form id="workout-form">
                         <input type="datetime-local" id="workout-date" required>
-                        <textarea id="workout-description" placeholder="Workout description" required></textarea>
+                        <div class="textarea-container">
+                            <textarea id="workout-description" placeholder="Workout description" required maxlength="1000"></textarea>
+                            <div id="char-counter">0 / 1000</div>
+                        </div>
+                        <br></br>
                         <button type="button" onclick="logWorkout()">Log Workout</button>
                     </form>
                 </section>

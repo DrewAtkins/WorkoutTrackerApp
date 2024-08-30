@@ -143,6 +143,7 @@ function logWorkout() {
         fetchWorkouts();
         document.getElementById('workout-date').value = '';
         document.getElementById('workout-description').value = '';
+        updateCharCounter();
     })
     .catch(error => {
         console.error('Error:', error);
@@ -180,3 +181,26 @@ function fetchWorkouts() {
         }
     });
 }
+
+function updateCharCounter() {
+    const textarea = document.getElementById('workout-description');
+    const charCounter = document.getElementById('char-counter');
+    const maxLength = 1000;
+    const currentLength = textarea.value.length;
+    
+    charCounter.textContent = `${currentLength} / ${maxLength}`;
+    
+    if (currentLength == maxLength) {
+        charCounter.style.color = 'red';
+    } else if (currentLength > maxLength * 0.9) {
+        charCounter.style.color = 'orange';
+    } else {
+        charCounter.style.color = 'black';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const textarea = document.getElementById('workout-description');
+    textarea.addEventListener('input', updateCharCounter);
+    updateCharCounter();
+});
