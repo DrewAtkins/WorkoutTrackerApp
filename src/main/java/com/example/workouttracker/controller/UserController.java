@@ -1,5 +1,6 @@
 package com.example.workouttracker.controller;
 
+import com.example.workouttracker.dto.UserDTO;
 import com.example.workouttracker.model.User;
 import com.example.workouttracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +14,14 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<User> signUp(@RequestBody User user) {
-        User createdUser = userService.createUser(user);
+    public ResponseEntity<UserDTO> signUp(@RequestBody UserDTO user) {
+        UserDTO createdUser = userService.createUser(user);
         return ResponseEntity.ok(createdUser);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User user) {
-        return userService.authenticateUser(user.getEmail(), user.getPassword());
+    public ResponseEntity<UserDTO> login(@RequestBody UserDTO user) {
+        return (ResponseEntity<UserDTO>) userService.authenticateUser(user.getEmail(), user.getPassword());
     }
 
     @PostMapping("/logout")
@@ -30,7 +31,7 @@ public class UserController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@RequestBody User user) {
-        return userService.resetPassword(user.getEmail());
+    public ResponseEntity<UserDTO> forgotPassword(@RequestBody UserDTO user) {
+        return (ResponseEntity<UserDTO>) userService.resetPassword(user.getEmail());
     }
 }

@@ -1,5 +1,7 @@
+// src/main/java/com/example/workouttracker/service/UserService.java
 package com.example.workouttracker.service;
 
+import com.example.workouttracker.dto.UserDTO;
 import com.example.workouttracker.model.User;
 import com.example.workouttracker.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +19,16 @@ public class UserService {
     @Autowired
     private JavaMailSender emailSender;
 
-    public User createUser(User user) {
-        return userRepository.save(user);
+    public UserDTO createUser(UserDTO userDTO) {
+        User user = new User();
+        user.setEmail(userDTO.getEmail());
+        user.setPassword(userDTO.getPassword());
+        // Ensure all required fields are set
+        if (user.getEmail() == null || user.getPassword() == null) {
+            throw new IllegalArgumentException("Email and password must not be null");
+        }
+        User savedUser = userRepository.save(user);
+        return convertToDTO(savedUser);
     }
 
     public User findByEmail(String email) {
@@ -33,7 +43,7 @@ public class UserService {
         if (!user.getPassword().equals(password)) {
             return ResponseEntity.badRequest().body("{\"error\": \"Incorrect password\"}");
         }
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(convertToDTO(user));
     }
 
     public ResponseEntity<?> resetPassword(String email) {
@@ -41,7 +51,7 @@ public class UserService {
         if (user == null) {
             return ResponseEntity.badRequest().body("{\"error\": \"Email not found\"}");
         }
-        
+
         String resetToken = UUID.randomUUID().toString();
         user.setResetToken(resetToken);
         userRepository.save(user);
@@ -58,5 +68,13 @@ public class UserService {
         message.setSubject("Password Reset Request");
         message.setText("To reset your password, please use the following token: " + resetToken);
         emailSender.send(message);
+    }
+
+    private UserDTO convertToDTO(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setPassword(user.getPassword());
+        return userDTO;
     }
 }
