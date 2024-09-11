@@ -17,9 +17,6 @@ public class WorkoutController {
 
     @PostMapping
     public ResponseEntity<WorkoutDTO> createWorkout(@RequestBody WorkoutDTO workoutDTO) {
-        if (workoutDTO.getUserId() == null) {
-            throw new IllegalArgumentException("User ID must not be null");
-        }
         WorkoutDTO createdWorkout = workoutService.createWorkout(workoutDTO);
         return ResponseEntity.ok(createdWorkout);
     }
