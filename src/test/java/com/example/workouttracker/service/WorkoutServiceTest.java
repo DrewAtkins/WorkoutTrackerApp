@@ -98,4 +98,13 @@ class WorkoutServiceTest {
         verify(userRepository, never()).findById(any());
         verify(workoutRepository, never()).save(any(Workout.class));
     }
+
+    @Test
+    void createWorkout_NullWorkoutDTO() {
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> workoutService.createWorkout(null));
+
+        verify(userRepository, never()).findById(any());
+        verify(workoutRepository, never()).save(any(Workout.class));
+    }
 }

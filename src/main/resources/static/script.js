@@ -122,13 +122,18 @@ function logWorkout() {
     const date = document.getElementById('workout-date').value;
     const description = document.getElementById('workout-description').value;
     
+    if (!currentUser || !currentUser.id) {
+        alert('Please log in before logging a workout.');
+        return;
+    }
+    
     fetch('/api/workouts', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ 
-            user: { id: currentUser.id },
+            userId: currentUser.id,
             date: date,
             description: description
         }),
@@ -156,6 +161,11 @@ function logWorkout() {
 }
 
 function fetchWorkouts() {
+    if (!currentUser || !currentUser.id) {
+        console.error('No user logged in');
+        return;
+    }
+
     fetch(`/api/workouts/user/${currentUser.id}`)
     .then(response => {
         if (!response.ok) {
